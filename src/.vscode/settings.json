@@ -1,0 +1,9 @@
+{
+    "files.associations": {
+        "array.c": "cpp",
+        "gc.c": "cpp",
+        "jlapi.c": "cpp",
+        "jltypes.c": "cpp",
+        "gf.c": "cpp"
+    }
+}
