@@ -1543,6 +1543,13 @@ end
 @deprecate cat_t{N,T}(::Type{Val{N}}, ::Type{T}, A, B) cat_t(Val(N), T, A, B) false
 @deprecate reshape{N}(A::AbstractArray, ::Type{Val{N}}) reshape(A, Val(N))
 
+# PR #22182
+@deprecate is_apple   Sys.isapple
+@deprecate is_bsd     Sys.isbsd
+@deprecate is_linux   Sys.islinux
+@deprecate is_unix    Sys.isunix
+@deprecate is_windows Sys.iswindows
+
 # END 0.7 deprecations
 
 # BEGIN 1.0 deprecations
