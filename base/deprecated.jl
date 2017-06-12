@@ -1543,6 +1543,10 @@ end
 @deprecate cat_t{N,T}(::Type{Val{N}}, ::Type{T}, A, B) cat_t(Val(N), T, A, B) false
 @deprecate reshape{N}(A::AbstractArray, ::Type{Val{N}}) reshape(A, Val(N))
 
+@deprecate fieldnames(v) fieldnames(typeof(v))
+# nfields(::Type) deprecation in builtins.c: update nfields tfunc in inference.jl when it is removed.
+# also replace `_nfields` with `nfields` in summarysize.c when this is removed.
+
 # END 0.7 deprecations
 
 # BEGIN 1.0 deprecations
