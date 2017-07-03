@@ -1114,7 +1114,7 @@ end
 @deprecate(SharedArray(filename::AbstractString, ::Type{T}, dims::NTuple, offset; kwargs...) where {T},
            SharedArray{T}(filename, dims, offset; kwargs...))
 
-@noinline function is_intrinsic_expr(x::ANY)
+@noinline function is_intrinsic_expr(@nospecialize(x))
     Base.depwarn("is_intrinsic_expr is deprecated. There are no intrinsic functions anymore.", :is_intrinsic_expr)
     return false
 end
@@ -1372,11 +1372,11 @@ _current_module() = ccall(:jl_get_current_module, Ref{Module}, ())
     depwarn("binding_module(symbol) is deprecated, use `binding_module(module, symbol)` instead.", :binding_module)
     return binding_module(_current_module(), s)
 end
-@noinline function expand(x::ANY)
+@noinline function expand(@nospecialize(x))
     depwarn("expand(x) is deprecated, use `expand(module, x)` instead.", :expand)
     return expand(_current_module(), x)
 end
-@noinline function macroexpand(x::ANY)
+@noinline function macroexpand(@nospecialize(x))
     depwarn("macroexpand(x) is deprecated, use `macroexpand(module, x)` instead.", :macroexpand)
     return macroexpand(_current_module(), x)
 end
@@ -1542,6 +1542,9 @@ end
 @deprecate cat{N}(::Type{Val{N}}, A::SparseArrays._DenseConcatGroup...) cat(Val(N), A...)
 @deprecate cat_t{N,T}(::Type{Val{N}}, ::Type{T}, A, B) cat_t(Val(N), T, A, B) false
 @deprecate reshape{N}(A::AbstractArray, ::Type{Val{N}}) reshape(A, Val(N))
+
+# ::ANY is deprecated in src/method.c
+# also remove all instances of `jl_ANY_flag` in src/
 
 # END 0.7 deprecations
 
