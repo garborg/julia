@@ -135,3 +135,18 @@ if opt_level > 0
     @test contains(compare_large_struct_ir, "call i32 @memcmp")
     @test !contains(compare_large_struct_ir, "%gcframe")
 end
+
+function two_breakpoint(a::Float64)
+    ccall(:jl_breakpoint, Void, (Ref{Float64},), a)
+    ccall(:jl_breakpoint, Void, (Ref{Float64},), a)
+end
+
+if opt_level > 0
+    @test !contains(get_llvm((a)->ccall(:jl_breakpoint, Void, (Ref{Float64},), a),
+                             Tuple{Float64}), "jl_gc_pool_alloc")
+    @test contains(get_llvm((a)->ccall(:jl_breakpoint, Void, (Ref{Any},), a),
+                            Tuple{Float64}), "jl_gc_pool_alloc")
+    two_breakpoint_ir = get_llvm(two_breakpoint, Tuple{Float64})
+    @test !contains(two_breakpoint_ir, "jl_gc_pool_alloc")
+    @test contains(two_breakpoint_ir, "llvm.lifetime.end")
+end
