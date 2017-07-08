@@ -29,7 +29,7 @@ struct InferenceParams
     # reasonable defaults
     function InferenceParams(world::UInt;
                     inlining::Bool = inlining_enabled(),
-                    inline_cost_threshold::Int = 100,
+                    inline_cost_threshold::Int = 150,
                     inline_nonleaf_penalty::Int = 1000,
                     inline_tupleret_bonus::Int = 400,
                     max_methods::Int = 4,
