@@ -139,6 +139,8 @@ Deprecated or removed
   * The method `replace(s::AbstractString, pat, r, count)` with `count <= 0` is deprecated
     in favor of `replace(s::AbstractString, pat, r, typemax(Int))` ([#22325]).
 
+  * `InexactError` now takes arguments: `InexactError(func::Symbol,
+    type, -3)` now prints as `ERROR: InexactError: func(type, -3)`.
 
 Julia v0.6.0 Release Notes
 ==========================

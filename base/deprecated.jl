@@ -1543,6 +1543,12 @@ end
 @deprecate cat_t{N,T}(::Type{Val{N}}, ::Type{T}, A, B) cat_t(Val(N), T, A, B) false
 @deprecate reshape{N}(A::AbstractArray, ::Type{Val{N}}) reshape(A, Val(N))
 
+# PR #20005
+function InexactError()
+    depwarn("InexactError now supports arguments, use `InexactError(funcname::Symbol, ::Type, value)` instead.", :InexactError)
+    InexactError(:none, Any, nothing)
+end
+
 # END 0.7 deprecations
 
 # BEGIN 1.0 deprecations
