@@ -4,12 +4,6 @@
 
 import Core.Intrinsics: cglobal, bitcast
 
-# This is equivalent to Sys.iswindows(), but that's not defined yet.
-# FIXME: Do not use this constant outside of this file! We're only using it here
-# rather than repeating the ccall as needed to avoid a weird SIGABRT on Windows.
-# See PR #22182 and issue #22713 for reference.
-const _jl_get_UNAME_eq_NT = ccall(:jl_get_UNAME, Any, ()) === :NT
-
 cfunction(f, r, a) = ccall(:jl_function_ptr, Ptr{Void}, (Any, Any, Any), f, r, a)
 
 if ccall(:jl_is_char_signed, Ref{Bool}, ())
@@ -24,7 +18,8 @@ Equivalent to the native `char` c-type.
 """
 Cchar
 
-if _jl_get_UNAME_eq_NT
+# The ccall here is equivalent to Sys.iswindows(), but that's not defined yet
+@static if ccall(:jl_get_UNAME, Any, ()) === :NT
     const Clong = Int32
     const Culong = UInt32
     const Cwchar_t = UInt16
@@ -55,7 +50,7 @@ Equivalent to the native `wchar_t` c-type ([`Int32`](@ref)).
 """
 Cwchar_t
 
-if !_jl_get_UNAME_eq_NT
+@static if ccall(:jl_get_UNAME, Any, ()) !== :NT
     const sizeof_mode_t = ccall(:jl_sizeof_mode_t, Cint, ())
     if sizeof_mode_t == 2
         const Cmode_t = Int16
@@ -124,7 +119,7 @@ end
 # symbols are guaranteed not to contain embedded NUL
 convert(::Type{Cstring}, s::Symbol) = Cstring(unsafe_convert(Ptr{Cchar}, s))
 
-if _jl_get_UNAME_eq_NT
+@static if ccall(:jl_get_UNAME, Any, ()) === :NT
 """
     Base.cwstring(s)
 
