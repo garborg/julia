@@ -122,3 +122,5 @@ setindex!(b::RefValue, x) = (b.x = x; b)
 setindex!(b::RefArray, x) = (b.x[b.i] = x; b)
 
 ###
+
+const oldbinding_counter = Ref(0)

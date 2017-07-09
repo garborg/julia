@@ -108,6 +108,20 @@ function resolve(g::GlobalRef; force::Bool=false)
     return g
 end
 
+function rename_binding(mod::Module, oldname::Symbol, newname::Symbol)
+    T = getfield(mod, oldname)
+    ccall(:jl_rename_binding, Void, (Any, Any, Any), mod, oldname, newname)
+    T.name.name = newname
+    T
+end
+
+function shunt_binding(mod::Module, oldname::Symbol)
+    i = oldbinding_counter[] + 1  # oldbinding_counter created in refpointer.jl
+    oldbinding_counter[] = i
+    newname = Symbol(oldname, '#', i)
+    rename_binding(mod, oldname, newname)
+end
+
 """
     fieldname(x::DataType, i::Integer)
 
