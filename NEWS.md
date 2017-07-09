@@ -49,6 +49,10 @@ This section lists changes that do not have deprecation warnings.
   * The format for a `ClusterManager` specifying the cookie on the command line is now
     `--worker=<cookie>`. `--worker <cookie>` will not work as it is now an optional argument.
 
+  * `randperm(n)` and `randcycle(n)` now always return a `Vector{Int}` (independent of
+    the type of `n`). Use the corresponding mutating functions `randperm!` and `randcycle!`
+    to control the array type ([#22723]).
+
 Library improvements
 --------------------
 
@@ -94,6 +98,9 @@ Library improvements
     `f(::Val{c}) = ...` and called by `f(Val(c))`. Notable affected functions include:
     `ntuple`, `Base.literal_pow`, `sqrtm`, `lufact`, `lufact!`, `qrfact`, `qrfact!`,
     `cholfact`, `cholfact!`, `_broadcast!`, `reshape`, `cat` and `cat_t`.
+
+  * Mutating versions of `randperm` and `randcycle` have been added:
+    `randperm!` and `randcycle!` ([#22723]).
 
 Compiler/Runtime improvements
 -----------------------------
